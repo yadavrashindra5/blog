@@ -22,4 +22,6 @@ public class Content {
     private String description;
     private Date publishedAt;
     private String image;
+    private String authorId;
+    private String authorName;
 }

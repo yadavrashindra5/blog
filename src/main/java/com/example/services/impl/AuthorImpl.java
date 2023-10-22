@@ -67,4 +67,11 @@ public class AuthorImpl implements AuthorService {
         Author savedAuthor= authorRepository.save(authorData);
         return mapper.map(savedAuthor,AuthorDto.class);
     }
+
+    @Override
+    public AuthorDto deleteAuthor(String authorId) {
+        Author author = authorRepository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("Give author id not found"));
+        authorRepository.delete(author);
+        return mapper.map(author,AuthorDto.class);
+    }
 }

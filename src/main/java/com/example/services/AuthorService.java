@@ -10,4 +10,5 @@ public interface AuthorService {
     List<AuthorDto>getAllAuthor();
     AuthorDto updateAuthor(AuthorDto authorDto,String authorId);
     AuthorDto uploadImage(AuthorDto authorDto);
+    AuthorDto deleteAuthor(String authorId);
 }

@@ -33,10 +33,10 @@ public class ContentController {
     private FileService fileService;
     @Value("${content.image.path}")
     private  String imageUploadPath;
-    @PostMapping
-    public ResponseEntity<ContentDto> createContent(@RequestBody  ContentDto contentDto){
+    @PostMapping("/{authorId}")
+    public ResponseEntity<ContentDto> createContent(@RequestBody  ContentDto contentDto,@PathVariable String authorId){
         logger.info("create content is {}",contentDto);
-        ContentDto content = contentService.createContent(contentDto);
+        ContentDto content = contentService.createContent(contentDto,authorId);
         return new ResponseEntity<>(content, HttpStatus.CREATED);
     }
     @GetMapping("/{contentId}")
@@ -53,6 +53,11 @@ public class ContentController {
     public ResponseEntity<ContentDto>updateContent(@RequestBody  ContentDto contentDto,@PathVariable String contentId){
         ContentDto contentDto1 = contentService.updateContent(contentDto, contentId);
         return new ResponseEntity<>(contentDto1,HttpStatus.OK);
+    }
+    @DeleteMapping("/{contentId}")
+    public ResponseEntity<ContentDto>deleteContent(@PathVariable String contentId){
+        ContentDto contentDto = contentService.deleteContent(contentId);
+        return new ResponseEntity<>(contentDto,HttpStatus.OK);
     }
     @PostMapping("/image/{contentId}")
     public ResponseEntity<ContentDto>uploadAuthorImage(@RequestParam(value = "image") MultipartFile authorImage, @PathVariable(value = "contentId")String contentId) throws IOException {

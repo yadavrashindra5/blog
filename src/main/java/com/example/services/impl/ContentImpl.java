@@ -1,9 +1,13 @@
 package com.example.services.impl;
 
+import com.example.dtos.AuthorDto;
 import com.example.dtos.ContentDto;
+import com.example.entities.Author;
 import com.example.entities.Content;
 import com.example.exceptions.ResourceNotFoundException;
+import com.example.repositories.AuthorRepository;
 import com.example.repositories.ContentRepository;
+import com.example.services.AuthorService;
 import com.example.services.ContentService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -24,16 +28,29 @@ public class ContentImpl implements ContentService {
     @Autowired
     private ContentRepository contentRepository;
     @Autowired
+    private AuthorService authorService;
+    @Autowired
+    private AuthorRepository authorRepository;
+    @Autowired
     private ModelMapper mapper;
     @Override
-    public ContentDto createContent(ContentDto contentDto) {
+    public ContentDto createContent(ContentDto contentDto,String authorId) {
         String contentId= UUID.randomUUID().toString();
         Date date=new Date();
         contentDto.setPublishedAt(date);
         contentDto.setId(contentId);
-
         Content content= mapper.map(contentDto, Content.class);
+        content.setAuthorId(authorId);
+
+
+        //author
+        Author author = authorRepository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("given id not found"));
+        author.getContent().add(content);
+        content.setAuthorName(author.getAuthorName());
+
         Content savedContent = contentRepository.save(content);
+        authorRepository.save(author);
+
         return mapper.map(savedContent,ContentDto.class);
     }
 
@@ -66,5 +83,12 @@ public class ContentImpl implements ContentService {
         Content content = mapper.map(contentDto, Content.class);
         Content savedContent = contentRepository.save(content);
         return mapper.map(savedContent,ContentDto.class);
+    }
+
+    @Override
+    public ContentDto deleteContent(String contentId) {
+        Content content = contentRepository.findById(contentId).orElseThrow(() -> new ResourceNotFoundException("Given content Id not found"));
+        contentRepository.delete(content);
+        return mapper.map(content,ContentDto.class);
     }
 }

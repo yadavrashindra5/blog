@@ -1,8 +1,12 @@
 package com.example.dtos;
 
+import com.example.entities.Content;
 import com.example.validate.Gender;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -20,4 +24,5 @@ public class AuthorDto {
     @Gender
     private String authorGender;
     private String authorImage;
+    private List<Content>content;
 }

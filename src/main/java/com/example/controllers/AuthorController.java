@@ -58,6 +58,11 @@ public class AuthorController {
         AuthorDto authorDto1 = authorService.updateAuthor(authorDto, authorId);
         return new ResponseEntity<>(authorDto1,HttpStatus.OK);
     }
+    @DeleteMapping("/{authorId}")
+    public ResponseEntity<AuthorDto>deleteAuthor(@PathVariable String authorId){
+        AuthorDto authorDto = authorService.deleteAuthor(authorId);
+        return new ResponseEntity<>(authorDto,HttpStatus.OK);
+    }
     @PostMapping("/image/{authorId}")
     public ResponseEntity<AuthorDto>uploadAuthorImage(@RequestParam(value = "authorImage")MultipartFile authorImage,@PathVariable(value = "authorId")String authorId) throws IOException {
         String imageName= fileService.uploadFile(authorImage, imageUploadPath);
