@@ -1,12 +1,11 @@
 package com.example.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -24,4 +23,7 @@ public class Content {
     private String image;
     private String authorId;
     private String authorName;
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "contentId")
+    private List<Comment>comment;
 }
